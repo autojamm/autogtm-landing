@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AutoGTM — Growth infrastructure for e-learning companies</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0a0a;
+  --bg-2:#141414;
+  --bg-3:#1c1c1c;
+  --line:#262626;
+  --line-2:#3a3a3a;
+  --text:#fafafa;
+  --text-2:#a3a3a3;
+  --text-3:#737373;
+  --accent:#d97757;
+  --accent-2:#f4a582;
+  --lime:#d4ff4f;
+  --serif:'Instrument Serif',Georgia,serif;
+  --sans:'Inter',system-ui,sans-serif;
+}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+nav{position:sticky;top:0;z-index:100;background:rgba(10,10,10,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{font-family:var(--serif);font-size:1.5rem;letter-spacing:-.01em}
+.logo span{color:var(--accent)}
+.nav-links{display:flex;gap:2rem;align-items:center}
+.nav-links a{font-size:14px;color:var(--text-2);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.nav-cta{background:var(--text);color:var(--bg)!important;padding:9px 18px;border-radius:100px;font-weight:500}
+.nav-cta:hover{background:var(--accent);color:#fff!important}
+
+.hero{padding:8rem 2rem 6rem;position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+.hero::before{content:'';position:absolute;top:-200px;right:-200px;width:600px;height:600px;background:radial-gradient(circle,rgba(217,119,87,.15) 0%,transparent 70%);pointer-events:none}
+.hero-in{max-width:1200px;margin:0 auto;position:relative}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;background:rgba(217,119,87,.1);border:1px solid rgba(217,119,87,.25);border-radius:100px;font-size:12px;color:var(--accent-2);margin-bottom:2rem;font-weight:500}
+.eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent)}
+h1{font-family:var(--serif);font-size:clamp(3rem,7vw,6rem);line-height:.95;letter-spacing:-.03em;margin-bottom:2rem;max-width:1000px;font-weight:400}
+h1 em{font-style:italic;color:var(--accent-2)}
+h1 .strike{position:relative;display:inline-block}
+h1 .strike::after{content:'';position:absolute;left:-4%;right:-4%;top:50%;height:6px;background:var(--accent);transform:rotate(-2deg);opacity:.85}
+.hero-sub{font-size:1.25rem;color:var(--text-2);max-width:620px;line-height:1.6;margin-bottom:3rem;font-weight:400}
+.hero-cta-row{display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap}
+.btn-pri{display:inline-flex;align-items:center;gap:8px;background:var(--text);color:var(--bg);padding:16px 28px;border-radius:100px;font-size:15px;font-weight:600;text-decoration:none;transition:transform .2s,background .2s}
+.btn-pri:hover{background:var(--accent);color:#fff;transform:translateY(-2px)}
+.btn-pri svg{width:16px;height:16px}
+.hero-meta{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-3)}
+.hero-meta::before{content:'';width:24px;height:1px;background:var(--text-3)}
+
+.logo-bar{padding:3rem 2rem;border-bottom:1px solid var(--line);background:var(--bg-2)}
+.logo-bar-in{max-width:1200px;margin:0 auto}
+.logo-bar-label{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--text-3);margin-bottom:1.75rem;text-align:center;font-weight:500}
+.logo-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:2.5rem}
+.logo-row span{font-family:var(--serif);font-size:1.4rem;color:var(--text-3);opacity:.6;transition:opacity .2s,color .2s;letter-spacing:-.01em;font-style:italic}
+.logo-row span:hover{opacity:1;color:var(--text-2)}
+
+.metrics{padding:6rem 2rem;border-bottom:1px solid var(--line)}
+.metrics-in{max-width:1200px;margin:0 auto}
+.section-head{display:flex;justify-content:space-between;align-items:end;margin-bottom:3rem;gap:2rem;flex-wrap:wrap}
+.section-tag{display:inline-block;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:1rem}
+.section-head h2{font-family:var(--serif);font-size:clamp(2rem,4vw,3.5rem);line-height:1;letter-spacing:-.02em;font-weight:400;max-width:700px}
+.section-head p{font-size:1rem;color:var(--text-2);max-width:380px;line-height:1.6}
+.metric-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.metric{background:var(--bg-2);padding:2.5rem 2rem;display:flex;flex-direction:column;justify-content:space-between;min-height:240px;transition:background .3s}
+.metric:hover{background:var(--bg-3)}
+.metric-num{font-family:var(--serif);font-size:clamp(3.5rem,6vw,5rem);line-height:1;letter-spacing:-.03em;color:var(--text);font-weight:400;margin-bottom:.5rem}
+.metric-num em{font-style:italic;color:var(--accent-2)}
+.metric-label{font-size:14px;color:var(--text-2);line-height:1.5}
+.metric-source{font-size:11px;color:var(--text-3);margin-top:1.5rem;letter-spacing:.05em;text-transform:uppercase}
+
+.problem{padding:7rem 2rem;background:var(--bg-2);border-bottom:1px solid var(--line)}
+.problem-in{max-width:1200px;margin:0 auto}
+.problem-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;margin-top:3rem}
+.problem-card{background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:2.25rem;transition:border-color .2s,transform .2s}
+.problem-card:hover{border-color:var(--line-2);transform:translateY(-3px)}
+.problem-card-num{font-family:var(--serif);font-size:.95rem;color:var(--accent);margin-bottom:1rem;letter-spacing:.05em;font-style:italic}
+.problem-card h3{font-family:var(--serif);font-size:1.6rem;line-height:1.15;letter-spacing:-.015em;margin-bottom:.75rem;font-weight:400}
+.problem-card p{font-size:14px;color:var(--text-2);line-height:1.6}
+
+.services{padding:7rem 2rem;border-bottom:1px solid var(--line)}
+.services-in{max-width:1200px;margin:0 auto}
+.svc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem;margin-top:3rem}
+.svc-card{background:var(--bg-2);border:1px solid var(--line);border-radius:20px;padding:2.5rem;position:relative;overflow:hidden;transition:border-color .2s,transform .2s;display:flex;flex-direction:column;gap:1.25rem;min-height:340px}
+.svc-card:hover{border-color:var(--accent);transform:translateY(-4px)}
+.svc-card.featured{background:linear-gradient(135deg,#1a1410 0%,#0a0a0a 100%);border-color:rgba(217,119,87,.4);grid-column:span 2}
+.svc-card.featured::before{content:'Flagship';position:absolute;top:1.5rem;right:1.5rem;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);font-weight:600;background:rgba(217,119,87,.12);padding:5px 12px;border-radius:100px;border:1px solid rgba(217,119,87,.3)}
+.svc-icon{width:44px;height:44px;border-radius:12px;background:rgba(217,119,87,.1);border:1px solid rgba(217,119,87,.25);display:flex;align-items:center;justify-content:center;color:var(--accent-2)}
+.svc-icon svg{width:22px;height:22px}
+.svc-card h3{font-family:var(--serif);font-size:1.75rem;line-height:1.1;letter-spacing:-.015em;font-weight:400}
+.svc-card.featured h3{font-size:2.25rem;max-width:560px}
+.svc-card h3 em{font-style:italic;color:var(--accent-2)}
+.svc-card p{font-size:14.5px;color:var(--text-2);line-height:1.6}
+.svc-result{display:flex;align-items:center;gap:10px;margin-top:auto;padding-top:1.25rem;border-top:1px solid var(--line);font-size:13px;color:var(--text-3)}
+.svc-result strong{color:var(--text);font-weight:600}
+
+.case{padding:7rem 2rem;background:var(--bg-2);border-bottom:1px solid var(--line)}
+.case-in{max-width:1200px;margin:0 auto}
+.case-card{background:var(--bg);border:1px solid var(--line);border-radius:24px;overflow:hidden;display:grid;grid-template-columns:1fr 1.2fr;margin-top:3rem}
+.case-left{padding:3rem;background:linear-gradient(160deg,#1a1410 0%,#0a0a0a 100%);display:flex;flex-direction:column;justify-content:space-between}
+.case-left-tag{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:1.5rem}
+.case-left h3{font-family:var(--serif);font-size:2.25rem;line-height:1.1;letter-spacing:-.015em;font-weight:400;margin-bottom:1rem}
+.case-left p{font-size:14px;color:var(--text-2);line-height:1.6;margin-bottom:2rem}
+.case-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;border-top:1px solid var(--line);padding-top:1.5rem}
+.case-stat-num{font-family:var(--serif);font-size:1.85rem;line-height:1;color:var(--accent-2);margin-bottom:.25rem;font-weight:400}
+.case-stat-lbl{font-size:11px;color:var(--text-3);letter-spacing:.03em;line-height:1.3}
+.case-right{padding:3rem;display:flex;flex-direction:column;justify-content:center}
+.case-right h4{font-family:var(--serif);font-size:1.05rem;color:var(--text-3);font-weight:400;font-style:italic;margin-bottom:.6rem;letter-spacing:.02em}
+.case-right p{font-size:15px;color:var(--text-2);line-height:1.65;margin-bottom:1.75rem}
+.case-quote{padding-top:1.75rem;border-top:1px solid var(--line)}
+.case-quote blockquote{font-family:var(--serif);font-size:1.5rem;line-height:1.3;color:var(--text);font-style:italic;margin-bottom:1.25rem;letter-spacing:-.005em}
+.case-author{display:flex;align-items:center;gap:12px}
+.case-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#d97757,#f4a582);display:flex;align-items:center;justify-content:center;color:#0a0a0a;font-weight:600;font-size:14px}
+.case-author-info p:first-child{font-size:14px;color:var(--text);font-weight:500}
+.case-author-info p:last-child{font-size:12px;color:var(--text-3)}
+
+.process{padding:7rem 2rem;border-bottom:1px solid var(--line)}
+.process-in{max-width:1200px;margin:0 auto}
+.process-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem;margin-top:3rem;position:relative}
+.step{background:var(--bg-2);border:1px solid var(--line);border-radius:16px;padding:2rem 1.75rem;position:relative;transition:border-color .2s,transform .2s}
+.step:hover{border-color:var(--accent);transform:translateY(-3px)}
+.step-num{font-family:var(--serif);font-size:.95rem;color:var(--accent);margin-bottom:1.5rem;font-style:italic;letter-spacing:.05em}
+.step h3{font-family:var(--serif);font-size:1.4rem;line-height:1.1;letter-spacing:-.01em;margin-bottom:.6rem;font-weight:400}
+.step p{font-size:13.5px;color:var(--text-2);line-height:1.55}
+
+.testimonials{padding:7rem 2rem;background:var(--bg-2);border-bottom:1px solid var(--line)}
+.testimonials-in{max-width:1200px;margin:0 auto}
+.testimonial-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-top:3rem}
+.testimonial{background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:2rem;display:flex;flex-direction:column;gap:1.5rem;transition:border-color .2s,transform .2s}
+.testimonial:hover{border-color:var(--line-2);transform:translateY(-3px)}
+.t-stars{display:flex;gap:2px;color:var(--accent)}
+.t-stars svg{width:14px;height:14px}
+.testimonial blockquote{font-size:15px;color:var(--text);line-height:1.55;font-weight:400;flex-grow:1}
+.t-author{display:flex;align-items:center;gap:12px;padding-top:1rem;border-top:1px solid var(--line)}
+.t-avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px;color:#0a0a0a}
+.t-avatar.a1{background:linear-gradient(135deg,#d97757,#f4a582)}
+.t-avatar.a2{background:linear-gradient(135deg,#d4ff4f,#a3d440)}
+.t-avatar.a3{background:linear-gradient(135deg,#85B7EB,#378ADD)}
+.t-author-info p:first-child{font-size:14px;color:var(--text);font-weight:500}
+.t-author-info p:last-child{font-size:12px;color:var(--text-3)}
+
+.who-sec{padding:7rem 2rem;border-bottom:1px solid var(--line)}
+.who-in{max-width:1200px;margin:0 auto}
+.who-layout{display:grid;grid-template-columns:1fr 1fr;gap:4rem;margin-top:3rem;align-items:start}
+.who-list h4{font-family:var(--serif);font-size:1.1rem;color:var(--text-2);margin-bottom:1.5rem;font-weight:400;font-style:italic}
+.who-row{display:flex;align-items:center;gap:1rem;padding:1.25rem 0;border-bottom:1px solid var(--line);font-size:15px}
+.who-row:first-of-type{border-top:1px solid var(--line)}
+.who-icon{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.who-icon svg{width:14px;height:14px}
+.who-icon.yes{background:rgba(217,119,87,.15);color:var(--accent-2)}
+.who-icon.no{background:rgba(115,115,115,.15);color:var(--text-3)}
+
+.cta{padding:8rem 2rem;border-bottom:1px solid var(--line);position:relative;overflow:hidden}
+.cta::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:800px;height:800px;background:radial-gradient(circle,rgba(217,119,87,.12) 0%,transparent 70%);pointer-events:none}
+.cta-in{max-width:800px;margin:0 auto;text-align:center;position:relative}
+.cta h2{font-family:var(--serif);font-size:clamp(2.5rem,5vw,4.5rem);line-height:1;letter-spacing:-.025em;margin-bottom:1.5rem;font-weight:400}
+.cta h2 em{font-style:italic;color:var(--accent-2)}
+.cta p{font-size:1.15rem;color:var(--text-2);margin-bottom:2.5rem;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.6}
+.cta-meta{margin-top:1.5rem;font-size:13px;color:var(--text-3);font-style:italic}
+
+footer{padding:3rem 2rem;background:var(--bg-2)}
+.footer-in{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.5rem}
+.footer-in p{font-size:13px;color:var(--text-3)}
+
+@media(max-width:900px){
+  .nav-links a:not(.nav-cta){display:none}
+  .metric-grid,.problem-grid,.svc-grid,.process-steps,.testimonial-grid,.who-layout{grid-template-columns:1fr}
+  .svc-card.featured{grid-column:span 1}
+  .case-card{grid-template-columns:1fr}
+  .case-left,.case-right{padding:2rem}
+  .case-stats{grid-template-columns:1fr 1fr 1fr}
+}
+@media(max-width:600px){
+  .hero{padding:5rem 1.5rem 4rem}
+  .case-stats{grid-template-columns:1fr}
+}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.eyebrow{animation:fadeUp .6s ease both}
+h1{animation:fadeUp .7s .1s ease both}
+.hero-sub{animation:fadeUp .7s .2s ease both}
+.hero-cta-row{animation:fadeUp .7s .3s ease both}
+</style>
+</head>
+<body>
+<nav>
+  <div class="logo">AutoGTM<span>.</span></div>
+  <div class="nav-links">
+    <a href="#problem">Problem</a>
+    <a href="#services">Services</a>
+    <a href="#case">Results</a>
+    <a href="#process">Process</a>
+    <a href="#contact" class="nav-cta">Book a call &rarr;</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-in">
+    <div class="eyebrow">Built for e-learning, $3M&ndash;$50M revenue</div>
+    <h1>Your traffic is fine. Your <span class="strike">marketing</span> <em>enrollment infrastructure</em> isn't.</h1>
+    <p class="hero-sub">We build the AI-powered enrollment, retention, and acquisition systems that mid-market e-learning companies need but can't hire for.</p>
+    <div class="hero-cta-row">
+      <a href="https://calendly.com/akshaygupta/15min" class="btn-pri">
+        Book a 30-minute audit
+        <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10m0 0L8 3m5 5l-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </a>
+      <span class="hero-meta">No pitch deck. Just a clear diagnosis.</span>
+    </div>
+  </div>
+</section>
+
+<section class="logo-bar">
+  <div class="logo-bar-in">
+    <p class="logo-bar-label">Trusted by e-learning teams shipping real growth</p>
+    <div class="logo-row">
+      <span>GreatLearning</span>
+      <span>SaaStr</span>
+      <span>Brand 03</span>
+      <span>Brand 04</span>
+      <span>Brand 05</span>
+      <span>Brand 06</span>
+    </div>
+  </div>
+</section>
+
+<section class="metrics" id="results">
+  <div class="metrics-in">
+    <div class="section-head">
+      <div>
+        <div class="section-tag">By the numbers</div>
+        <h2>Built on real outcomes, not promises.</h2>
+      </div>
+      <p>The work we've done across e-learning and high-velocity B2B is visible in the metrics — not the marketing copy.</p>
+    </div>
+    <div class="metric-grid">
+      <div class="metric">
+        <div>
+          <div class="metric-num">$10M<em>&rarr;</em>$100M</div>
+          <div class="metric-label">ARR scale supported through marketing systems we built at GreatLearning</div>
+        </div>
+        <div class="metric-source">GreatLearning &middot; e-learning</div>
+      </div>
+      <div class="metric">
+        <div>
+          <div class="metric-num">49<em>&times;</em></div>
+          <div class="metric-label">ROAS sustained while scaling paid spend from $15K to $1M monthly</div>
+        </div>
+        <div class="metric-source">Professional education client</div>
+      </div>
+      <div class="metric">
+        <div>
+          <div class="metric-num">$4M</div>
+          <div class="metric-label">Quarterly pipeline generated by AI sales agents we deployed at SaaStr</div>
+        </div>
+        <div class="metric-source">SaaStr &middot; B2B media</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="problem" id="problem">
+  <div class="problem-in">
+    <div class="section-head">
+      <div>
+        <div class="section-tag">The honest diagnosis</div>
+        <h2>E-learning at $3M&ndash;$50M has specific problems. Most agencies don't see them.</h2>
+      </div>
+    </div>
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="problem-card-num">01</div>
+        <h3>Enrollments die after hours</h3>
+        <p>Prospects research at night. Your team sleeps. By morning they've moved to a competitor.</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-card-num">02</div>
+        <h3>CAC is eating margin</h3>
+        <p>Meta and Google CPMs up 40&ndash;60% over three years. Creative testing can't keep up. LTV:CAC compresses every quarter.</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-card-num">03</div>
+        <h3>Student data lives in three systems</h3>
+        <p>You can't see cohort economics. You can't predict churn. Decisions get made on gut instead of evidence.</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-card-num">04</div>
+        <h3>Instructors do support, not teaching</h3>
+        <p>Your best people spend 15 hours a week on the same 20 questions. The product they built gets diluted as you scale.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="services" id="services">
+  <div class="services-in">
+    <div class="section-head">
+      <div>
+        <div class="section-tag">What we build</div>
+        <h2>Four systems. Each solves a real problem.</h2>
+      </div>
+      <p>We don't offer everything. We've built deep expertise in the four areas where mid-market e-learning consistently leaks revenue.</p>
+    </div>
+    <div class="svc-grid">
+      <div class="svc-card featured">
+        <div class="svc-icon">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>The AI enrollment agent that knows your <em>courses cold.</em></h3>
+        <p>Not a chatbot. A purpose-trained conversational agent that handles objections, runs course comparisons, answers payment plan and ISA questions, and captures qualified leads 24/7 — with the depth of a senior enrollment advisor who's been at your company for five years.</p>
+        <div class="svc-result">
+          <strong>30&ndash;45%</strong> lift in lead capture rate within 60 days &middot; from existing traffic
+        </div>
+      </div>
+      <div class="svc-card">
+        <div class="svc-icon">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M3 3v18h18M7 14l3-3 4 4 5-7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>Cohort analytics &amp; <em>data quality.</em></h3>
+        <p>We consolidate your LMS, payment, CRM and email data into one source of truth. Cohort tracking shows source-to-completion economics. Churn early-warning fires before students cancel.</p>
+        <div class="svc-result">
+          Clear cohort P&amp;L by source, in <strong>6&ndash;8 weeks</strong>
+        </div>
+      </div>
+      <div class="svc-card">
+        <div class="svc-icon">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>Paid ads <em>validation &amp; scaling.</em></h3>
+        <p>30-day creative testing sprint with 15&ndash;20 AI-generated variants against your control. Ranked demand scorecard. Winners roll into a full retainer with weekly iteration.</p>
+        <div class="svc-result">
+          Up to <strong>4&times; conversion lift</strong> on winning variants
+        </div>
+      </div>
+      <div class="svc-card">
+        <div class="svc-icon">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 7a4 4 0 100 8 4 4 0 000-8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>Instructor enablement <em>AI layer.</em></h3>
+        <p>An AI support layer handles high-volume, low-complexity student questions. Your instructors reserve time for the moments that justify their fees: feedback, coaching, the conversations that drive retention.</p>
+        <div class="svc-result">
+          <strong>10&ndash;15 hrs/week</strong> recovered per instructor in 30 days
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="case" id="case">
+  <div class="case-in">
+    <div class="section-head">
+      <div>
+        <div class="section-tag">Client result</div>
+        <h2>What this looks like in practice.</h2>
+      </div>
+    </div>
+    <div class="case-card">
+      <div class="case-left">
+        <div>
+          <div class="case-left-tag">$14M e-learning platform</div>
+          <h3>From "hire another advisor" to AI that works at 2am.</h3>
+          <p>A 6-person team handling 1,400 monthly visitors with real intent. Enrollment questions going unanswered after 6pm. Two of three recent cohorts underfilled.</p>
+        </div>
+        <div class="case-stats">
+          <div>
+            <div class="case-stat-num">43%</div>
+            <div class="case-stat-lbl">Lift in lead capture</div>
+          </div>
+          <div>
+            <div class="case-stat-num">87%</div>
+            <div class="case-stat-lbl">Inquiries handled by AI</div>
+          </div>
+          <div>
+            <div class="case-stat-num">44d</div>
+            <div class="case-stat-lbl">To full deployment</div>
+          </div>
+        </div>
+      </div>
+      <div class="case-right">
+        <h4>What we built</h4>
+        <p>An AI enrollment agent trained on 14 programs, pricing tiers, payment plans, and the 40 most common objections. Paired with cohort analytics showing source-to-completion economics. Their team handles escalations; the agent handles the rest.</p>
+        <div class="case-quote">
+          <blockquote>"We'd been told to hire another enrollment advisor. This cost less than a month of that salary and it works at 2am on a Sunday."</blockquote>
+          <div class="case-author">
+            <div class="case-avatar">JR</div>
+            <div class="case-author-info">
+              <p>VP of Growth</p>
+              <p>$14M cohort-based learning platform</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="process" id="process">
+  <div class="process-in">
+    <div class="section-head">
+      <div>
+        <div class="section-tag">How we work</div>
+        <h2>Small client load. Intentional.</h2>
+      </div>
+      <p>We cap at 5&ndash;6 clients because the work requires actual thinking — not account managers executing a template.</p>
+    </div>
+    <div class="process-steps">
+      <div class="step">
+        <div class="step-num">i.</div>
+        <h3>Audit</h3>
+        <p>30-minute diagnostic. Pointed questions about funnel, cohort fill, instructor load. You leave with a clear diagnosis either way.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">ii.</div>
+        <h3>Scope</h3>
+        <p>Specific outcome. Specific timeline. Pricing anchored to value, not hours. Project or retainer — we'll tell you which.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">iii.</div>
+        <h3>Prove</h3>
+        <p>30&ndash;60 day proof-of-value window before a full retainer begins. We'd rather earn the relationship than lock it in.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">iv.</div>
+        <h3>Scale</h3>
+        <p>Compounding services like enrollment agent and paid ads roll into ongoing retainer. Project-based work ships and ends.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="testimonials">
+  <div class="testimonials-in">
+    <div class="section-head">
+      <div>
+        <div class="section-tag">Real people, real results</div>
+        <h2>What clients actually say.</h2>
+      </div>
+    </div>
+    <div class="testimonial-grid">
+      <div class="testimonial">
+        <div class="t-stars">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
+        </div>
+        <blockquote>"Their AI enrollment agent does the work of two senior advisors. We're closing pipeline at 11pm we never used to see."</blockquote>
+        <div class="t-author">
+          <div class="t-avatar a1">MR</div>
+          <div class="t-author-info">
+            <p>Maya R.</p>
+            <p>VP Growth, e-learning platform</p>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial">
+        <div class="t-stars">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
+        </div>
+        <blockquote>"Akshay's team scaled our paid spend 60x without losing efficiency. They actually understand e-learning unit economics."</blockquote>
+        <div class="t-author">
+          <div class="t-avatar a2">DK</div>
+          <div class="t-author-info">
+            <p>David K.</p>
+            <p>Head of Marketing, professional education</p>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial">
+        <div class="t-stars">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
+        </div>
+        <blockquote>"Finally an agency that doesn't pretend to know e-learning. They've actually been inside companies like ours."</blockquote>
+        <div class="t-author">
+          <div class="t-avatar a3">SP</div>
+          <div class="t-author-info">
+            <p>Sarah P.</p>
+            <p>Director of Enrollment, bootcamp</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="who-sec" id="who">
+  <div class="who-in">
+    <div class="section-head">
+      <div>
+        <div class="section-tag">Who we work with</div>
+        <h2>We're a fit for some companies. Not all.</h2>
+      </div>
+    </div>
+    <div class="who-layout">
+      <div class="who-list">
+        <h4>Yes, this is for you</h4>
+        <div class="who-row">
+          <div class="who-icon yes"><svg viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div>$3M&ndash;$50M annual revenue</div>
+        </div>
+        <div class="who-row">
+          <div class="who-icon yes"><svg viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div>10K+ monthly site visitors</div>
+        </div>
+        <div class="who-row">
+          <div class="who-icon yes"><svg viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div>Cohort, instructor-led, or credentialing model</div>
+        </div>
+        <div class="who-row">
+          <div class="who-icon yes"><svg viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div>US or Canada based</div>
+        </div>
+        <div class="who-row">
+          <div class="who-icon yes"><svg viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div>One internal owner for the engagement</div>
+        </div>
+      </div>
+      <div class="who-list">
+        <h4>Probably not a fit</h4>
+        <div class="who-row">
+          <div class="who-icon no"><svg viewBox="0 0 14 14" fill="none"><path d="M4 4l6 6m0-6l-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+          <div>Pre-$1M revenue, still finding product-market fit</div>
+        </div>
+        <div class="who-row">
+          <div class="who-icon no"><svg viewBox="0 0 14 14" fill="none"><path d="M4 4l6 6m0-6l-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+          <div>Fully self-paced platforms with no instructor layer</div>
+        </div>
+        <div class="who-row">
+          <div class="who-icon no"><svg viewBox="0 0 14 14" fill="none"><path d="M4 4l6 6m0-6l-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+          <div>K-12 platforms selling to school districts</div>
+        </div>
+        <div class="who-row">
+          <div class="who-icon no"><svg viewBox="0 0 14 14" fill="none"><path d="M4 4l6 6m0-6l-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+          <div>Companies looking for results in week one</div>
+        </div>
+        <div class="who-row">
+          <div class="who-icon no"><svg viewBox="0 0 14 14" fill="none"><path d="M4 4l6 6m0-6l-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+          <div>Internal teams that won't share data access</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta" id="contact">
+  <div class="cta-in">
+    <div class="section-tag" style="margin-bottom:1.5rem">Ready to talk</div>
+    <h2>Tell us what's broken. We'll tell you if we can <em>fix it.</em></h2>
+    <p>30 minutes. No pitch deck, no proposal pressure. An honest conversation about your funnel, your data, or wherever you're bleeding revenue.</p>
+    <a href="https://calendly.com/akshaygupta/15min" class="btn-pri">
+      Book a 30-minute audit
+      <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10m0 0L8 3m5 5l-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </a>
+    <p class="cta-meta">Currently 2 spots open for Q3 engagements. We respond within one business day.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-in">
+    <div class="logo">AutoGTM<span>.</span></div>
+    <p>Growth infrastructure for e-learning &middot; US &amp; Canada</p>
+    <p>&copy; 2026</p>
+  </div>
+</footer>
+</body>
+</html>
