@@ -1,578 +1,425 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AutoGTM — Growth infrastructure for e-learning companies</title>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Demand Loop — LinkedIn demand for B2B SaaS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#0a0a0a;
-  --bg-2:#141414;
-  --bg-3:#1c1c1c;
-  --line:#262626;
-  --line-2:#3a3a3a;
-  --text:#fafafa;
-  --text-2:#a3a3a3;
-  --text-3:#737373;
-  --accent:#d97757;
-  --accent-2:#f4a582;
-  --lime:#d4ff4f;
-  --serif:'Instrument Serif',Georgia,serif;
-  --sans:'Inter',system-ui,sans-serif;
-}
-html{scroll-behavior:smooth;background:var(--bg)}
-body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  :root{
+    --paper:#E9E7E0;
+    --paper-deep:#DEDBD2;
+    --ink:#181C1A;
+    --ink-soft:#5D625C;
+    --rule:#C4C1B6;
+    --marker:#E6EA5A;
+    --redline:#B8402B;
+    --display:"Bricolage Grotesque",system-ui,sans-serif;
+    --body:"Newsreader",Georgia,serif;
+    --mono:"IBM Plex Mono",ui-monospace,monospace;
+    --wrap:1080px;
+  }
 
-nav{position:sticky;top:0;z-index:100;background:rgba(10,10,10,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:64px}
-.logo{font-family:var(--serif);font-size:1.5rem;letter-spacing:-.01em}
-.logo span{color:var(--accent)}
-.nav-links{display:flex;gap:2rem;align-items:center}
-.nav-links a{font-size:14px;color:var(--text-2);text-decoration:none;transition:color .2s}
-.nav-links a:hover{color:var(--text)}
-.nav-cta{background:var(--text);color:var(--bg)!important;padding:9px 18px;border-radius:100px;font-weight:500}
-.nav-cta:hover{background:var(--accent);color:#fff!important}
+  *{box-sizing:border-box;}
 
-.hero{padding:8rem 2rem 6rem;position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
-.hero::before{content:'';position:absolute;top:-200px;right:-200px;width:600px;height:600px;background:radial-gradient(circle,rgba(217,119,87,.15) 0%,transparent 70%);pointer-events:none}
-.hero-in{max-width:1200px;margin:0 auto;position:relative}
-.eyebrow{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;background:rgba(217,119,87,.1);border:1px solid rgba(217,119,87,.25);border-radius:100px;font-size:12px;color:var(--accent-2);margin-bottom:2rem;font-weight:500}
-.eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent)}
-h1{font-family:var(--serif);font-size:clamp(3rem,7vw,6rem);line-height:.95;letter-spacing:-.03em;margin-bottom:2rem;max-width:1000px;font-weight:400}
-h1 em{font-style:italic;color:var(--accent-2)}
-h1 .strike{position:relative;display:inline-block}
-h1 .strike::after{content:'';position:absolute;left:-4%;right:-4%;top:50%;height:6px;background:var(--accent);transform:rotate(-2deg);opacity:.85}
-.hero-sub{font-size:1.25rem;color:var(--text-2);max-width:620px;line-height:1.6;margin-bottom:3rem;font-weight:400}
-.hero-cta-row{display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap}
-.btn-pri{display:inline-flex;align-items:center;gap:8px;background:var(--text);color:var(--bg);padding:16px 28px;border-radius:100px;font-size:15px;font-weight:600;text-decoration:none;transition:transform .2s,background .2s}
-.btn-pri:hover{background:var(--accent);color:#fff;transform:translateY(-2px)}
-.btn-pri svg{width:16px;height:16px}
-.hero-meta{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-3)}
-.hero-meta::before{content:'';width:24px;height:1px;background:var(--text-3)}
+  html{scroll-behavior:smooth;}
 
-.logo-bar{padding:3rem 2rem;border-bottom:1px solid var(--line);background:var(--bg-2)}
-.logo-bar-in{max-width:1200px;margin:0 auto}
-.logo-bar-label{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--text-3);margin-bottom:1.75rem;text-align:center;font-weight:500}
-.logo-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:2.5rem}
-.logo-row span{font-family:var(--serif);font-size:1.4rem;color:var(--text-3);opacity:.6;transition:opacity .2s,color .2s;letter-spacing:-.01em;font-style:italic}
-.logo-row span:hover{opacity:1;color:var(--text-2)}
-.logo-row .logo-img{height:32px;width:auto;opacity:.6;filter:grayscale(100%) brightness(1.5);transition:opacity .2s,filter .2s}
-.logo-row .logo-img:hover{opacity:1;filter:grayscale(0%) brightness(1)}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--body);
+    font-size:19px;
+    line-height:1.6;
+    font-weight:300;
+    -webkit-font-smoothing:antialiased;
+  }
 
-.metrics{padding:6rem 2rem;border-bottom:1px solid var(--line)}
-.metrics-in{max-width:1200px;margin:0 auto}
-.section-head{display:flex;justify-content:space-between;align-items:end;margin-bottom:3rem;gap:2rem;flex-wrap:wrap}
-.section-tag{display:inline-block;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:1rem}
-.section-head h2{font-family:var(--serif);font-size:clamp(2rem,4vw,3.5rem);line-height:1;letter-spacing:-.02em;font-weight:400;max-width:700px}
-.section-head p{font-size:1rem;color:var(--text-2);max-width:380px;line-height:1.6}
-.metric-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden}
-.metric{background:var(--bg-2);padding:2.5rem 2rem;display:flex;flex-direction:column;justify-content:space-between;min-height:240px;transition:background .3s}
-.metric:hover{background:var(--bg-3)}
-.metric-num{font-family:var(--serif);font-size:clamp(3.5rem,6vw,5rem);line-height:1;letter-spacing:-.03em;color:var(--text);font-weight:400;margin-bottom:.5rem}
-.metric-num em{font-style:italic;color:var(--accent-2)}
-.metric-label{font-size:14px;color:var(--text-2);line-height:1.5}
-.metric-source{font-size:11px;color:var(--text-3);margin-top:1.5rem;letter-spacing:.05em;text-transform:uppercase}
+  .wrap{max-width:var(--wrap);margin:0 auto;padding:0 28px;}
 
-.problem{padding:7rem 2rem;background:var(--bg-2);border-bottom:1px solid var(--line)}
-.problem-in{max-width:1200px;margin:0 auto}
-.problem-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;margin-top:3rem}
-.problem-card{background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:2.25rem;transition:border-color .2s,transform .2s}
-.problem-card:hover{border-color:var(--line-2);transform:translateY(-3px)}
-.problem-card-num{font-family:var(--serif);font-size:.95rem;color:var(--accent);margin-bottom:1rem;letter-spacing:.05em;font-style:italic}
-.problem-card h3{font-family:var(--serif);font-size:1.6rem;line-height:1.15;letter-spacing:-.015em;margin-bottom:.75rem;font-weight:400}
-.problem-card p{font-size:14px;color:var(--text-2);line-height:1.6}
+  .lbl{
+    font-family:var(--mono);
+    font-size:11.5px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    font-weight:500;
+  }
 
-.services{padding:7rem 2rem;border-bottom:1px solid var(--line)}
-.services-in{max-width:1200px;margin:0 auto}
-.svc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem;margin-top:3rem}
-.svc-card{background:var(--bg-2);border:1px solid var(--line);border-radius:20px;padding:2.5rem;position:relative;overflow:hidden;transition:border-color .2s,transform .2s;display:flex;flex-direction:column;gap:1.25rem;min-height:340px}
-.svc-card:hover{border-color:var(--accent);transform:translateY(-4px)}
-.svc-card.featured{background:linear-gradient(135deg,#1a1410 0%,#0a0a0a 100%);border-color:rgba(217,119,87,.4);grid-column:span 2}
-.svc-card.featured::before{content:'Flagship';position:absolute;top:1.5rem;right:1.5rem;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);font-weight:600;background:rgba(217,119,87,.12);padding:5px 12px;border-radius:100px;border:1px solid rgba(217,119,87,.3)}
-.svc-icon{width:44px;height:44px;border-radius:12px;background:rgba(217,119,87,.1);border:1px solid rgba(217,119,87,.25);display:flex;align-items:center;justify-content:center;color:var(--accent-2)}
-.svc-icon svg{width:22px;height:22px}
-.svc-card h3{font-family:var(--serif);font-size:1.75rem;line-height:1.1;letter-spacing:-.015em;font-weight:400}
-.svc-card.featured h3{font-size:2.25rem;max-width:560px}
-.svc-card h3 em{font-style:italic;color:var(--accent-2)}
-.svc-card p{font-size:14.5px;color:var(--text-2);line-height:1.6}
-.svc-result{display:flex;align-items:center;gap:10px;margin-top:auto;padding-top:1.25rem;border-top:1px solid var(--line);font-size:13px;color:var(--text-3)}
-.svc-result strong{color:var(--text);font-weight:600}
+  h2.hd{
+    font-family:var(--display);
+    font-weight:700;
+    font-size:clamp(28px,4vw,44px);
+    line-height:1.06;
+    letter-spacing:-.02em;
+    margin:14px 0 0;
+    max-width:20ch;
+  }
 
-.case{padding:7rem 2rem;background:var(--bg-2);border-bottom:1px solid var(--line)}
-.case-in{max-width:1200px;margin:0 auto}
-.case-card{background:var(--bg);border:1px solid var(--line);border-radius:24px;overflow:hidden;display:grid;grid-template-columns:1fr 1.2fr;margin-top:3rem}
-.case-left{padding:3rem;background:linear-gradient(160deg,#1a1410 0%,#0a0a0a 100%);display:flex;flex-direction:column;justify-content:space-between}
-.case-left-tag{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:1.5rem}
-.case-left h3{font-family:var(--serif);font-size:2.25rem;line-height:1.1;letter-spacing:-.015em;font-weight:400;margin-bottom:1rem}
-.case-left p{font-size:14px;color:var(--text-2);line-height:1.6;margin-bottom:2rem}
-.case-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;border-top:1px solid var(--line);padding-top:1.5rem}
-.case-stat-num{font-family:var(--serif);font-size:1.85rem;line-height:1;color:var(--accent-2);margin-bottom:.25rem;font-weight:400}
-.case-stat-lbl{font-size:11px;color:var(--text-3);letter-spacing:.03em;line-height:1.3}
-.case-right{padding:3rem;display:flex;flex-direction:column;justify-content:center}
-.case-right h4{font-family:var(--serif);font-size:1.05rem;color:var(--text-3);font-weight:400;font-style:italic;margin-bottom:.6rem;letter-spacing:.02em}
-.case-right p{font-size:15px;color:var(--text-2);line-height:1.65;margin-bottom:1.75rem}
-.case-quote{padding-top:1.75rem;border-top:1px solid var(--line)}
-.case-quote blockquote{font-family:var(--serif);font-size:1.5rem;line-height:1.3;color:var(--text);font-style:italic;margin-bottom:1.25rem;letter-spacing:-.005em}
-.case-author{display:flex;align-items:center;gap:12px}
-.case-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#d97757,#f4a582);display:flex;align-items:center;justify-content:center;color:#0a0a0a;font-weight:600;font-size:14px}
-.case-author-info p:first-child{font-size:14px;color:var(--text);font-weight:500}
-.case-author-info p:last-child{font-size:12px;color:var(--text-3)}
+  a{color:inherit;}
 
-.process{padding:7rem 2rem;border-bottom:1px solid var(--line)}
-.process-in{max-width:1200px;margin:0 auto}
-.process-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem;margin-top:3rem;position:relative}
-.step{background:var(--bg-2);border:1px solid var(--line);border-radius:16px;padding:2rem 1.75rem;position:relative;transition:border-color .2s,transform .2s}
-.step:hover{border-color:var(--accent);transform:translateY(-3px)}
-.step-num{font-family:var(--serif);font-size:.95rem;color:var(--accent);margin-bottom:1.5rem;font-style:italic;letter-spacing:.05em}
-.step h3{font-family:var(--serif);font-size:1.4rem;line-height:1.1;letter-spacing:-.01em;margin-bottom:.6rem;font-weight:400}
-.step p{font-size:13.5px;color:var(--text-2);line-height:1.55}
+  :focus-visible{outline:2.5px solid var(--redline);outline-offset:3px;}
 
-.testimonials{padding:7rem 2rem;background:var(--bg-2);border-bottom:1px solid var(--line)}
-.testimonials-in{max-width:1200px;margin:0 auto}
-.testimonial-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-top:3rem}
-.testimonial{background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:2rem;display:flex;flex-direction:column;gap:1.5rem;transition:border-color .2s,transform .2s}
-.testimonial:hover{border-color:var(--line-2);transform:translateY(-3px)}
-.t-stars{display:flex;gap:2px;color:var(--accent)}
-.t-stars svg{width:14px;height:14px}
-.testimonial blockquote{font-size:15px;color:var(--text);line-height:1.55;font-weight:400;flex-grow:1}
-.t-author{display:flex;align-items:center;gap:12px;padding-top:1rem;border-top:1px solid var(--line)}
-.t-avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px;color:#0a0a0a}
-.t-avatar.a1{background:linear-gradient(135deg,#d97757,#f4a582)}
-.t-avatar.a2{background:linear-gradient(135deg,#d4ff4f,#a3d440)}
-.t-avatar.a3{background:linear-gradient(135deg,#85B7EB,#378ADD)}
-.t-author-info p:first-child{font-size:14px;color:var(--text);font-weight:500}
-.t-author-info p:last-child{font-size:12px;color:var(--text-3)}
+  /* ---------- marker + redline: the signature ---------- */
+  .mark{
+    background-image:linear-gradient(102deg,transparent .4%,var(--marker) 1.6%,var(--marker) 97.5%,transparent 99.4%);
+    border-radius:.45em .18em .5em .22em;
+    padding:.04em .22em;
+    -webkit-box-decoration-break:clone;
+    box-decoration-break:clone;
+  }
+  .struck{position:relative;color:var(--ink-soft);white-space:normal;}
+  .struck::after{
+    content:"";
+    position:absolute;left:-.1em;right:-.1em;top:52%;
+    height:2px;background:var(--redline);
+    transform:scaleX(0);transform-origin:left center;
+    animation:strike .55s cubic-bezier(.5,0,.2,1) .5s forwards;
+  }
+  @keyframes strike{to{transform:scaleX(1);}}
 
-.who-sec{padding:7rem 2rem;border-bottom:1px solid var(--line)}
-.who-in{max-width:1200px;margin:0 auto}
-.who-layout{display:grid;grid-template-columns:1fr 1fr;gap:4rem;margin-top:3rem;align-items:start}
-.who-list h4{font-family:var(--serif);font-size:1.1rem;color:var(--text-2);margin-bottom:1.5rem;font-weight:400;font-style:italic}
-.who-row{display:flex;align-items:center;gap:1rem;padding:1.25rem 0;border-bottom:1px solid var(--line);font-size:15px}
-.who-row:first-of-type{border-top:1px solid var(--line)}
-.who-icon{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.who-icon svg{width:14px;height:14px}
-.who-icon.yes{background:rgba(217,119,87,.15);color:var(--accent-2)}
-.who-icon.no{background:rgba(115,115,115,.15);color:var(--text-3)}
+  .reveal{
+    opacity:0;transform:translateY(9px);
+    animation:rise .7s cubic-bezier(.2,.7,.3,1) forwards;
+  }
+  .d1{animation-delay:.05s}.d2{animation-delay:1.05s}.d3{animation-delay:1.3s}.d4{animation-delay:1.5s}
+  @keyframes rise{to{opacity:1;transform:none;}}
 
-.cta{padding:8rem 2rem;border-bottom:1px solid var(--line);position:relative;overflow:hidden}
-.cta::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:800px;height:800px;background:radial-gradient(circle,rgba(217,119,87,.12) 0%,transparent 70%);pointer-events:none}
-.cta-in{max-width:800px;margin:0 auto;text-align:center;position:relative}
-.cta h2{font-family:var(--serif);font-size:clamp(2.5rem,5vw,4.5rem);line-height:1;letter-spacing:-.025em;margin-bottom:1.5rem;font-weight:400}
-.cta h2 em{font-style:italic;color:var(--accent-2)}
-.cta p{font-size:1.15rem;color:var(--text-2);margin-bottom:2.5rem;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.6}
-.cta-meta{margin-top:1.5rem;font-size:13px;color:var(--text-3);font-style:italic}
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important;}
+    .reveal{opacity:1;transform:none;}
+    .struck::after{transform:scaleX(1);}
+    html{scroll-behavior:auto;}
+  }
 
-footer{padding:3rem 2rem;background:var(--bg-2)}
-.footer-in{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.5rem}
-.footer-in p{font-size:13px;color:var(--text-3)}
+  /* ---------- nav ---------- */
+  .nav{padding:26px 0 0;}
+  .nav .wrap{display:flex;justify-content:space-between;align-items:baseline;gap:20px;}
+  .wordmark{font-family:var(--mono);font-size:12.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;}
+  .nav a.navlink{font-family:var(--mono);font-size:12.5px;letter-spacing:.08em;text-decoration:none;border-bottom:1.5px solid var(--ink);padding-bottom:2px;}
 
-@media(max-width:900px){
-  .nav-links a:not(.nav-cta){display:none}
-  .metric-grid,.problem-grid,.svc-grid,.process-steps,.testimonial-grid,.who-layout{grid-template-columns:1fr}
-  .svc-card.featured{grid-column:span 1}
-  .case-card{grid-template-columns:1fr}
-  .case-left,.case-right{padding:2rem}
-  .case-stats{grid-template-columns:1fr 1fr 1fr}
-}
-@media(max-width:600px){
-  .hero{padding:5rem 1.5rem 4rem}
-  .case-stats{grid-template-columns:1fr}
-}
+  /* ---------- hero ---------- */
+  .hero{padding:78px 0 96px;}
+  .transcript{
+    border-left:2px solid var(--ink);
+    padding-left:clamp(18px,3vw,34px);
+    max-width:900px;
+  }
+  .stamp{display:flex;gap:16px;flex-wrap:wrap;align-items:baseline;margin-bottom:26px;}
+  .quote{
+    font-family:var(--display);
+    font-weight:500;
+    font-size:clamp(27px,4.6vw,54px);
+    line-height:1.14;
+    letter-spacing:-.025em;
+    margin:0 0 22px;
+  }
+  .quote.second{font-weight:700;}
+  .attrib{font-family:var(--mono);font-size:12px;color:var(--ink-soft);letter-spacing:.06em;margin-bottom:34px;}
+  .lede{font-size:clamp(19px,2.1vw,23px);max-width:62ch;margin:0 0 34px;line-height:1.55;}
 
-@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-.eyebrow{animation:fadeUp .6s ease both}
-h1{animation:fadeUp .7s .1s ease both}
-.hero-sub{animation:fadeUp .7s .2s ease both}
-.hero-cta-row{animation:fadeUp .7s .3s ease both}
+  .cta{
+    display:inline-block;
+    font-family:var(--mono);
+    font-size:13px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    text-decoration:none;
+    background:var(--ink);
+    color:var(--paper);
+    padding:16px 30px;
+    border:2px solid var(--ink);
+    transition:background .18s ease,color .18s ease;
+  }
+  .cta:hover{background:transparent;color:var(--ink);}
+  .cta.ghost{background:transparent;color:var(--ink);}
+  .cta.ghost:hover{background:var(--ink);color:var(--paper);}
+  .cta-row{display:flex;gap:16px;flex-wrap:wrap;align-items:center;}
+  .cta-note{font-family:var(--mono);font-size:12px;color:var(--ink-soft);}
+
+  /* ---------- sections ---------- */
+  .band{border-top:1px solid var(--rule);padding:74px 0;}
+  .band.dark{background:var(--ink);color:var(--paper);border-top:none;}
+  .band.dark .lbl{color:#9AA096;}
+  .band.deep{background:var(--paper-deep);}
+
+  .stack p{max-width:64ch;}
+
+  /* ---------- offer ladder ---------- */
+  .ladder{margin-top:46px;display:grid;gap:0;}
+  .rung{
+    display:grid;
+    grid-template-columns:56px 1fr 220px;
+    gap:28px;
+    padding:34px 0;
+    border-top:1px solid var(--rule);
+    align-items:start;
+  }
+  .rung:last-child{border-bottom:1px solid var(--rule);}
+  .rung-num{font-family:var(--mono);font-size:13px;color:var(--ink-soft);padding-top:6px;}
+  .rung-name{font-family:var(--display);font-weight:700;font-size:clamp(22px,2.6vw,30px);letter-spacing:-.02em;margin:0 0 10px;line-height:1.14;}
+  .rung-body{margin:0;max-width:56ch;}
+  .rung-meta{text-align:right;}
+  .rung-price{font-family:var(--display);font-weight:700;font-size:24px;letter-spacing:-.01em;display:block;line-height:1.2;}
+  .rung-terms{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);letter-spacing:.06em;display:block;margin-top:7px;line-height:1.7;}
+  .pricing-note{font-family:var(--mono);font-size:12.5px;color:var(--ink-soft);margin-top:22px;letter-spacing:.03em;}
+
+  /* ---------- scope ---------- */
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:56px;margin-top:44px;}
+  ul.scope{list-style:none;margin:14px 0 0;padding:0;}
+  ul.scope li{padding:11px 0;border-bottom:1px solid var(--rule);font-size:17.5px;}
+  ul.scope.out li{color:var(--ink-soft);}
+  ul.scope.out li span{text-decoration:line-through;text-decoration-color:var(--redline);text-decoration-thickness:1.5px;}
+  .band.dark ul.scope li{border-bottom-color:#333934;}
+  .kicker{font-family:var(--display);font-weight:500;font-size:clamp(21px,2.5vw,27px);line-height:1.3;letter-spacing:-.015em;margin:52px 0 0;max-width:34ch;}
+
+  /* ---------- loop ---------- */
+  .loop{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);margin-top:44px;border:1px solid var(--rule);}
+  .step{background:var(--paper);padding:26px 22px 30px;}
+  .band.deep .step{background:var(--paper-deep);}
+  .step h3{font-family:var(--display);font-weight:700;font-size:19px;margin:12px 0 8px;letter-spacing:-.01em;}
+  .step p{margin:0;font-size:16px;line-height:1.5;color:var(--ink-soft);}
+  .loop-close{font-family:var(--mono);font-size:12.5px;letter-spacing:.06em;color:var(--ink-soft);margin-top:20px;}
+
+  /* ---------- fit ---------- */
+  .fit{display:grid;grid-template-columns:1fr 1fr;gap:56px;margin-top:44px;}
+  .fit h3{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;margin:0 0 6px;}
+
+  /* ---------- close ---------- */
+  .close{padding:96px 0 104px;text-align:left;}
+  .close h2{font-family:var(--display);font-weight:800;font-size:clamp(34px,6vw,68px);line-height:1.02;letter-spacing:-.03em;margin:16px 0 26px;max-width:16ch;}
+
+  footer{border-top:1px solid var(--rule);padding:30px 0 44px;}
+  footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;}
+  footer .lbl{color:var(--ink-soft);}
+
+  @media (max-width:860px){
+    .cols,.fit{grid-template-columns:1fr;gap:40px;}
+    .loop{grid-template-columns:1fr 1fr;}
+    .rung{grid-template-columns:36px 1fr;gap:16px;}
+    .rung-meta{grid-column:2;text-align:left;margin-top:6px;}
+    .rung-terms{margin-top:4px;}
+  }
+  @media (max-width:560px){
+    body{font-size:17.5px;}
+    .hero{padding:52px 0 68px;}
+    .band{padding:56px 0;}
+    .loop{grid-template-columns:1fr;}
+    .cta{display:block;text-align:center;}
+    .cta-row{display:block;}
+    .cta-row .cta{margin-bottom:12px;}
+  }
 </style>
 </head>
 <body>
-<nav>
-  <div class="logo">AutoGTM<span>.</span></div>
-  <div class="nav-links">
-    <a href="#problem">Problem</a>
-    <a href="#services">Services</a>
-    <a href="#case">Results</a>
-    <a href="#process">Process</a>
-    <a href="#contact" class="nav-cta">Book a call &rarr;</a>
+
+<nav class="nav">
+  <div class="wrap">
+    <span class="wordmark">The Demand Loop</span>
+    <a class="navlink" href="https://calendly.com/akshaygupta/discovery?month=2026-08" target="_blank" rel="noopener">Book a teardown</a>
   </div>
 </nav>
 
-<section class="hero">
-  <div class="hero-in">
-    <div class="eyebrow">Built for e-learning, $3M&ndash;$50M revenue</div>
-    <h1>Your traffic is fine. Your <span class="strike">marketing</span> <em>enrollment infrastructure</em> isn't.</h1>
-    <p class="hero-sub">We build the AI-powered enrollment, retention, and acquisition systems that mid-market e-learning companies need but can't hire for.</p>
-    <div class="hero-cta-row">
-      <a href="https://calendly.com/akshaygupta/discovery" class="btn-pri">
-        Book a 30-minute audit
-        <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10m0 0L8 3m5 5l-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-      </a>
-      <span class="hero-meta">No pitch deck. Just a clear diagnosis.</span>
-    </div>
-  </div>
-</section>
-
-<section class="logo-bar">
-  <div class="logo-bar-in">
-    <p class="logo-bar-label">Trusted by e-learning teams shipping real growth</p>
-    <div class="logo-row">
-      <img src="assets/logos/great_learning.png" alt="Great Learning" class="logo-img">
-      <img src="assets/logos/saas_academy.png" alt="SaaS Academy" class="logo-img">
-      <img src="assets/logos/kodekloud.png" alt="Kode Kloud" class="logo-img">
-      <img src="assets/logos/zety.png" alt="Zety" class="logo-img">
-      <img src="assets/logos/coindcx.png" alt="Coin DCX" class="logo-img">
-    </div>
-  </div>
-</section>
-
-<section class="metrics" id="results">
-  <div class="metrics-in">
-    <div class="section-head">
-      <div>
-        <div class="section-tag">By the numbers</div>
-        <h2>Built on real outcomes, not promises.</h2>
+<header class="hero">
+  <div class="wrap">
+    <div class="transcript">
+      <div class="stamp reveal d1">
+        <span class="lbl">Buyer interview</span>
+        <span class="lbl">[00:14:32]</span>
+        <span class="lbl">Closed lost</span>
       </div>
-      <p>The work we've done across e-learning and high-velocity B2B is visible in the metrics — not the marketing copy.</p>
+
+      <p class="quote reveal d1"><span class="struck">"The leading AI-powered platform for modern revenue teams."</span></p>
+
+      <p class="quote second reveal d2">"Honestly? <span class="mark">I just needed to stop rebuilding the same report every Monday.</span>"</p>
+
+      <p class="attrib reveal d3">First line: their homepage. Second line: their buyer, on a recorded call, explaining why he almost didn't buy.</p>
+
+      <p class="lede reveal d3">I run those calls for B2B SaaS companies, turn what buyers actually say into LinkedIn campaigns, and measure the result back to pipeline in your CRM. One channel, taken all the way to revenue.</p>
+
+      <div class="cta-row reveal d4">
+        <a class="cta" href="https://calendly.com/akshaygupta/discovery?month=2026-08" target="_blank" rel="noopener">Get a free message teardown</a>
+        <span class="cta-note">90 minutes of my time. No pitch attached.</span>
+      </div>
     </div>
-    <div class="metric-grid">
-      <div class="metric">
+  </div>
+</header>
+
+<section class="band">
+  <div class="wrap stack">
+    <span class="lbl">Why LinkedIn stops working</span>
+    <h2 class="hd">Your campaigns are fine. The words in them came from a positioning doc.</h2>
+    <p style="margin-top:26px;">Most B2B SaaS teams write ads from an internal narrative — the one built in a workshop, refined by committee, and never once checked against a person who nearly bought and didn't. The targeting gets optimized. The bids get optimized. The message, which is the only variable that actually moves a buying committee, never gets tested against reality.</p>
+    <p>Then attribution reports a cost per lead, sales says the leads are bad, and the channel gets cut. The channel wasn't the problem.</p>
+  </div>
+</section>
+
+<section class="band deep" id="offers">
+  <div class="wrap">
+    <span class="lbl">What you can buy</span>
+    <h2 class="hd">Three ways in. Each one works standalone.</h2>
+
+    <div class="ladder">
+
+      <article class="rung">
+        <span class="rung-num">01</span>
         <div>
-          <div class="metric-num">$10M<em>&rarr;</em>$100M</div>
-          <div class="metric-label">ARR scale supported through marketing systems we built at GreatLearning</div>
+          <h3 class="rung-name">LinkedIn Message Teardown</h3>
+          <p class="rung-body">I go through your company page, your founder's posts, your ads if you're running any, your homepage, and three competitors. You get a 12-minute recorded walkthrough and a one-page document naming the gaps I found. If I don't find anything worth fixing, I'll tell you that instead.</p>
         </div>
-        <div class="metric-source">GreatLearning &middot; e-learning</div>
-      </div>
-      <div class="metric">
+        <div class="rung-meta">
+          <span class="rung-price">Free</span>
+          <span class="rung-terms">Delivered in 5 days<br>No call required</span>
+        </div>
+      </article>
+
+      <article class="rung">
+        <span class="rung-num">02</span>
         <div>
-          <div class="metric-num">49<em>&times;</em></div>
-          <div class="metric-label">ROAS sustained while scaling paid spend from $15K to $1M monthly</div>
+          <h3 class="rung-name">Messaging Sprint</h3>
+          <p class="rung-body">Twelve to fifteen recorded interviews with accounts you won, lost, and churned. What lands in your hands is ready to ship Monday: 20–25 LinkedIn post angles ranked by how often the theme surfaced in interviews, three landing page headline and subhead sets, an ad hook bank of 12–15 with the objection each one answers, and the full objection map with raw transcripts. Yours to keep whether or not we work together after.</p>
         </div>
-        <div class="metric-source">Professional Education Client</div>
-      </div>
-      <div class="metric">
+        <div class="rung-meta">
+          <span class="rung-price">$5,000</span>
+          <span class="rung-terms">Four weeks<br>Most engagements start here</span>
+        </div>
+      </article>
+
+      <article class="rung">
+        <span class="rung-num">03</span>
         <div>
-          <div class="metric-num">$3.9M</div>
-          <div class="metric-label">Quarterly pipeline generated with rapid paid ads growth at SaaS Academy</div>
+          <h3 class="rung-name">LinkedIn Demand Loop</h3>
+          <p class="rung-body">Content architecture for your founder and company page, paid campaigns deploying the messages the sprint surfaced, landing pages written for that traffic, conversion tracking wired to your CRM, and account-level reporting on which messages moved which accounts. Every month includes a message review: angles that fatigued get retired, new ones get promoted from two or three fresh buyer calls folded into delivery. The library compounds. The cost per pipeline doesn't.</p>
         </div>
-        <div class="metric-source">SaaS Academy &middot; B2B coaching</div>
-      </div>
+        <div class="rung-meta">
+          <span class="rung-price">$4,000<span style="font-family:var(--mono);font-size:14px;font-weight:400;">/mo</span></span>
+          <span class="rung-terms">Month to month<br>Sprint required first</span>
+        </div>
+      </article>
+
     </div>
+
+    <p class="pricing-note">Flat fee, always. Never a percentage of your ad spend — you should never wonder whether I told you to spend more because it pays me more.</p>
   </div>
 </section>
 
-<section class="problem" id="problem">
-  <div class="problem-in">
-    <div class="section-head">
+<section class="band dark">
+  <div class="wrap">
+    <span class="lbl">Scope</span>
+    <h2 class="hd">One channel, taken to the end of the funnel.</h2>
+
+    <div class="cols">
       <div>
-        <div class="section-tag">The honest diagnosis</div>
-        <h2>E-learning at $3M&ndash;$50M has specific problems. Most agencies don't see them.</h2>
+        <span class="lbl">In scope</span>
+        <ul class="scope">
+          <li>Recorded buyer interviews and message research</li>
+          <li>LinkedIn organic — founder and company page</li>
+          <li>LinkedIn ads — thought leadership, document, conversation</li>
+          <li>Ad creative and copy</li>
+          <li>Landing pages for LinkedIn traffic</li>
+          <li>Conversion tracking and offline conversions to your CRM</li>
+          <li>Account-level engagement and pipeline reporting</li>
+        </ul>
+      </div>
+      <div>
+        <span class="lbl">Not in scope</span>
+        <ul class="scope out">
+          <li><span>SEO and content marketing</span></li>
+          <li><span>Google Ads and paid search</span></li>
+          <li><span>Outbound email sequences</span></li>
+          <li><span>HubSpot or Salesforce implementation</span></li>
+          <li><span>Brand identity and design systems</span></li>
+          <li><span>Acting as your entire marketing team</span></li>
+        </ul>
       </div>
     </div>
-    <div class="problem-grid">
-      <div class="problem-card">
-        <div class="problem-card-num">01</div>
-        <h3>Enrollments die after hours</h3>
-        <p>Prospects research at night. Your team sleeps. By morning they've moved to a competitor.</p>
-      </div>
-      <div class="problem-card">
-        <div class="problem-card-num">02</div>
-        <h3>CAC is eating margin</h3>
-        <p>Meta and Google CPMs up 40&ndash;60% over three years. Creative testing can't keep up. LTV:CAC compresses every quarter.</p>
-      </div>
-      <div class="problem-card">
-        <div class="problem-card-num">03</div>
-        <h3>Student data lives in three systems</h3>
-        <p>You can't see cohort economics. You can't predict churn. Decisions get made on gut instead of evidence.</p>
-      </div>
-      <div class="problem-card">
-        <div class="problem-card-num">04</div>
-        <h3>Instructors do support, not teaching</h3>
-        <p>Your best people spend 15 hours a week on the same 20 questions. The product they built gets diluted as you scale.</p>
-      </div>
-    </div>
+
+    <p class="kicker">One channel measured to revenue beats five channels measured to the click.</p>
   </div>
 </section>
 
-<section class="services" id="services">
-  <div class="services-in">
-    <div class="section-head">
-      <div>
-        <div class="section-tag">What we build</div>
-        <h2>Four systems. Each solves a real problem.</h2>
-      </div>
-      <p>We don't offer everything. We've built deep expertise in the four areas where mid-market e-learning consistently leaks revenue.</p>
-    </div>
-    <div class="svc-grid">
-      <div class="svc-card featured">
-        <div class="svc-icon">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <h3>The AI enrollment agent that knows your <em>courses cold.</em></h3>
-        <p>Not a chatbot. A purpose-trained conversational agent that handles objections, runs course comparisons, answers payment plan and ISA questions, and captures qualified leads 24/7 — with the depth of a senior enrollment advisor who's been at your company for five years.</p>
-        <div class="svc-result">
-          <strong>30&ndash;45%</strong> lift in lead capture rate within 60 days &middot; from existing traffic
-        </div>
-      </div>
-      <div class="svc-card">
-        <div class="svc-icon">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M3 3v18h18M7 14l3-3 4 4 5-7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <h3>Cohort analytics &amp; <em>data quality.</em></h3>
-        <p>We consolidate your LMS, payment, CRM and email data into one source of truth. Cohort tracking shows source-to-completion economics. Churn early-warning fires before students cancel.</p>
-        <div class="svc-result">
-          Clear cohort P&amp;L by source, in <strong>6&ndash;8 weeks</strong>
-        </div>
-      </div>
-      <div class="svc-card">
-        <div class="svc-icon">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <h3>Paid ads <em>validation &amp; scaling.</em></h3>
-        <p>30-day creative testing sprint with 15&ndash;20 AI-generated variants against your control. Ranked demand scorecard. Winners roll into a full retainer with weekly iteration.</p>
-        <div class="svc-result">
-          Up to <strong>4&times; conversion lift</strong> on winning variants
-        </div>
-      </div>
-      <div class="svc-card">
-        <div class="svc-icon">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 7a4 4 0 100 8 4 4 0 000-8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <h3>Instructor enablement <em>AI layer.</em></h3>
-        <p>An AI support layer handles high-volume, low-complexity student questions. Your instructors reserve time for the moments that justify their fees: feedback, coaching, the conversations that drive retention.</p>
-        <div class="svc-result">
-          <strong>10&ndash;15 hrs/week</strong> recovered per instructor in 30 days
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+<section class="band">
+  <div class="wrap">
+    <span class="lbl">How the work runs</span>
+    <h2 class="hd">A loop, not a campaign.</h2>
 
-<section class="case" id="case">
-  <div class="case-in">
-    <div class="section-head">
-      <div>
-        <div class="section-tag">Client result</div>
-        <h2>What this looks like in practice.</h2>
-      </div>
-    </div>
-    <div class="case-card">
-      <div class="case-left">
-        <div>
-          <div class="case-left-tag">$14M e-learning platform</div>
-          <h3>From "hire another advisor" to AI that works at 2am.</h3>
-          <p>A 6-person team handling 1,400 monthly visitors with real intent. Enrollment questions going unanswered after 6pm. Two of three recent cohorts underfilled.</p>
-        </div>
-        <div class="case-stats">
-          <div>
-            <div class="case-stat-num">43%</div>
-            <div class="case-stat-lbl">Lift in lead capture</div>
-          </div>
-          <div>
-            <div class="case-stat-num">87%</div>
-            <div class="case-stat-lbl">Inquiries handled by AI</div>
-          </div>
-          <div>
-            <div class="case-stat-num">44d</div>
-            <div class="case-stat-lbl">To full deployment</div>
-          </div>
-        </div>
-      </div>
-      <div class="case-right">
-        <h4>What we built</h4>
-        <p>An AI enrollment agent trained on 14 programs, pricing tiers, payment plans, and the 40 most common objections. Paired with cohort analytics showing source-to-completion economics. Their team handles escalations; the agent handles the rest.</p>
-        <div class="case-quote">
-          <blockquote>"We'd been told to hire another enrollment advisor. This cost less than a month of that salary and it works at 2am on a Sunday."</blockquote>
-          <div class="case-author">
-            <div class="case-avatar">JR</div>
-            <div class="case-author-info">
-              <p>VP of Growth</p>
-              <p>$14M cohort-based learning platform</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="process" id="process">
-  <div class="process-in">
-    <div class="section-head">
-      <div>
-        <div class="section-tag">How we work</div>
-        <h2>Small client load. Intentional.</h2>
-      </div>
-      <p>We cap at 5&ndash;6 clients because the work requires actual thinking — not account managers executing a template.</p>
-    </div>
-    <div class="process-steps">
+    <div class="loop">
       <div class="step">
-        <div class="step-num">i.</div>
-        <h3>Audit</h3>
-        <p>30-minute diagnostic. Pointed questions about funnel, cohort fill, instructor load. You leave with a clear diagnosis either way.</p>
+        <span class="lbl">Step 01</span>
+        <h3>Listen</h3>
+        <p>Recorded calls with buyers who said yes, no, and eventually left. Transcribed and coded for the language that repeats.</p>
       </div>
       <div class="step">
-        <div class="step-num">ii.</div>
-        <h3>Scope</h3>
-        <p>Specific outcome. Specific timeline. Pricing anchored to value, not hours. Project or retainer — we'll tell you which.</p>
+        <span class="lbl">Step 02</span>
+        <h3>Write</h3>
+        <p>Their words become message variants — hooks, angles, and formats built to be tested against each other, not admired.</p>
       </div>
       <div class="step">
-        <div class="step-num">iii.</div>
-        <h3>Prove</h3>
-        <p>30&ndash;60 day proof-of-value window before a full retainer begins. We'd rather earn the relationship than lock it in.</p>
+        <span class="lbl">Step 03</span>
+        <h3>Deploy</h3>
+        <p>Organic and paid on LinkedIn, aimed at the accounts you actually want, with landing pages that carry the same language through.</p>
       </div>
       <div class="step">
-        <div class="step-num">iv.</div>
-        <h3>Scale</h3>
-        <p>Compounding services like enrollment agent and paid ads roll into ongoing retainer. Project-based work ships and ends.</p>
+        <span class="lbl">Step 04</span>
+        <h3>Measure</h3>
+        <p>Account-level response synced to your CRM, so you can see which message reached which account and what it turned into.</p>
       </div>
     </div>
+
+    <p class="loop-close">→ Step 04 feeds step 02. The message library compounds every month you run it.</p>
   </div>
 </section>
 
-<section class="testimonials">
-  <div class="testimonials-in">
-    <div class="section-head">
+<section class="band deep">
+  <div class="wrap">
+    <span class="lbl">Fit</span>
+    <h2 class="hd">I turn down more work than I take.</h2>
+
+    <div class="fit">
       <div>
-        <div class="section-tag">Real people, real results</div>
-        <h2>What clients actually say.</h2>
+        <h3>This works when</h3>
+        <ul class="scope">
+          <li>You're B2B SaaS between roughly $3M and $20M ARR</li>
+          <li>Deals close in three to nine months</li>
+          <li>A buying committee decides, not a credit card</li>
+          <li>Your buyers are genuinely on LinkedIn</li>
+          <li>Someone can get me thirty minutes with your customers</li>
+        </ul>
       </div>
-    </div>
-    <div class="testimonial-grid">
-      <div class="testimonial">
-        <div class="t-stars">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
-        </div>
-        <blockquote>"Their AI enrollment agent does the work of two senior advisors. We're closing pipeline at 11pm we never used to see."</blockquote>
-        <div class="t-author">
-          <div class="t-avatar a1">MR</div>
-          <div class="t-author-info">
-            <p>Maya R.</p>
-            <p>VP Growth</p>
-          </div>
-        </div>
-      </div>
-      <div class="testimonial">
-        <div class="t-stars">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
-        </div>
-        <blockquote>"The results speak for themselves. A 600% increase in enrollments and an 11x growth in organic traffic, directly contributing to a high-value ($600M+) acquisition. We couldn’t have asked for a better growth partner"</blockquote>
-        <div class="t-author">
-          <div class="t-avatar a2">DK</div>
-          <div class="t-author-info">
-            <p>Aparna M.</p>
-            <p>CMO</p>
-          </div>
-        </div>
-      </div>
-      <div class="testimonial">
-        <div class="t-stars">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
-        </div>
-        <blockquote>"AutoGTM helped us roll out new marketing campaigns much faster with personalized messaging for different demographics at scale. We expanded the user base by 10 million in a single year and increased customer activation by 27%"</blockquote>
-        <div class="t-author">
-          <div class="t-avatar a3">SP</div>
-          <div class="t-author-info">
-            <p>Sarah P.</p>
-            <p>Director of Marketing</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="who-sec" id="who">
-  <div class="who-in">
-    <div class="section-head">
       <div>
-        <div class="section-tag">Who we work with</div>
-        <h2>We're a fit for some companies. Not all.</h2>
-      </div>
-    </div>
-    <div class="who-layout">
-      <div class="who-list">
-        <h4>Yes, this is for you</h4>
-        <div class="who-row">
-          <div class="who-icon yes"><svg viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-          <div>$3M&ndash;$50M annual revenue</div>
-        </div>
-        <div class="who-row">
-          <div class="who-icon yes"><svg viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-          <div>10K+ monthly site visitors</div>
-        </div>
-        <div class="who-row">
-          <div class="who-icon yes"><svg viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-          <div>Cohort, instructor-led, or credentialing model</div>
-        </div>
-        <div class="who-row">
-          <div class="who-icon yes"><svg viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-          <div>US or Canada based</div>
-        </div>
-        <div class="who-row">
-          <div class="who-icon yes"><svg viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-          <div>One internal owner for the engagement</div>
-        </div>
-      </div>
-      <div class="who-list">
-        <h4>Probably not a fit</h4>
-        <div class="who-row">
-          <div class="who-icon no"><svg viewBox="0 0 14 14" fill="none"><path d="M4 4l6 6m0-6l-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
-          <div>Pre-$1M revenue, still finding product-market fit</div>
-        </div>
-        <div class="who-row">
-          <div class="who-icon no"><svg viewBox="0 0 14 14" fill="none"><path d="M4 4l6 6m0-6l-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
-          <div>Fully self-paced platforms with no instructor layer</div>
-        </div>
-        <div class="who-row">
-          <div class="who-icon no"><svg viewBox="0 0 14 14" fill="none"><path d="M4 4l6 6m0-6l-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
-          <div>K-12 platforms selling to school districts</div>
-        </div>
-        <div class="who-row">
-          <div class="who-icon no"><svg viewBox="0 0 14 14" fill="none"><path d="M4 4l6 6m0-6l-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
-          <div>Companies looking for results in week one</div>
-        </div>
-        <div class="who-row">
-          <div class="who-icon no"><svg viewBox="0 0 14 14" fill="none"><path d="M4 4l6 6m0-6l-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
-          <div>Internal teams that won't share data access</div>
-        </div>
+        <h3>This doesn't</h3>
+        <ul class="scope out">
+          <li><span>Heavily regulated buyers — health systems, banking core, defense, government</span></li>
+          <li><span>Enterprise cycles running eighteen months or longer</span></li>
+          <li><span>Self-serve products under $2K a year</span></li>
+          <li><span>Compliance has veto power over your messaging</span></li>
+          <li><span>You want a vendor to run ads and stay out of strategy</span></li>
+        </ul>
       </div>
     </div>
   </div>
 </section>
 
-<section class="cta" id="contact">
-  <div class="cta-in">
-    <div class="section-tag" style="margin-bottom:1.5rem">Ready to talk</div>
-    <h2>Tell us what's broken. We'll tell you if we can <em>fix it.</em></h2>
-    <p>30 minutes. No pitch deck, no proposal pressure. An honest conversation about your funnel, your data, or wherever you're bleeding revenue.</p>
-    <a href="https://calendly.com/akshaygupta/discovery" class="btn-pri">
-      Book a 30-minute audit
-      <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10m0 0L8 3m5 5l-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-    </a>
-    <p class="cta-meta">Currently 2 spots open for Q3 engagements. We respond within one business day.</p>
+<section class="close" id="teardown">
+  <div class="wrap">
+    <span class="lbl">Start here</span>
+    <h2>Let me tear apart your LinkedIn first.</h2>
+    <p class="lede">Send me your company page and your homepage. Within five days you'll get a recorded walkthrough of what's working, what isn't, and the specific language I'd test first. If you want to talk after that, we'll talk.</p>
+    <div class="cta-row">
+      <a class="cta" href="https://calendly.com/akshaygupta/discovery?month=2026-08" target="_blank" rel="noopener">Request your teardown</a>
+      <a class="cta ghost" href="#offers">See the offers again</a>
+    </div>
   </div>
 </section>
 
 <footer>
-  <div class="footer-in">
-    <div class="logo">AutoGTM<span>.</span></div>
-    <p>Growth infrastructure for e-learning &middot; US &amp; Canada</p>
-    <p>&copy; 2026</p>
+  <div class="wrap">
+    <span class="lbl">The Demand Loop</span>
+    <span class="lbl">LinkedIn demand for B2B SaaS</span>
   </div>
 </footer>
+
 </body>
 </html>
